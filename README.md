@@ -17,13 +17,15 @@ A simple app that will query contact.co.nz for a profile and puts usage data int
 * Clone the repository
 * Run `yarn install` in the root folder
 * Create a .env file in the root folder with the following settings required to run:
-	* CONTACT_API_KEY=
-	* CONTACT_USERNAME=
-	* CONTACT_PASSWORD=
-	* INFLUX_TOKEN=
-	* INFLUX_ORG=
-	* INFLUX_BUCKET_POWER_ID=
-	* INFLUX_BUCKET_POWER_NAME=
+```
+CONTACT_API_KEY=
+CONTACT_USERNAME=
+CONTACT_PASSWORD=
+INFLUX_TOKEN=
+INFLUX_ORG=
+INFLUX_BUCKET_POWER_ID=
+INFLUX_BUCKET_POWER_NAME=
+```
 
 ### Executing program
 
