@@ -20,8 +20,8 @@
         "typescript": "^3.9.5"
     },
     "scripts": {
-        "start": "npx yarn run build && node dist/index.js",
-        "build": "npx yarn run tsc",
-        "tsc": "tsc"
+        "start": "node dist/index.js",
+        "build": "tsc",
+        "postinstall": "npx yarn run build"
     }
 }
