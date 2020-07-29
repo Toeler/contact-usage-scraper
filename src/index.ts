@@ -21,18 +21,18 @@ enum MomentChunk {
 };
 
 function getMissingChunks(points: PowerUsagePoint[], chunkPeriod: MomentChunk, chunksBack: number): moment.Moment[] {
-	const now = moment.utc().startOf(chunkPeriod);
+	const now = moment.tz('Pacific/Auckland').startOf(chunkPeriod);
 	let time = moment(now).subtract(chunksBack, chunkPeriod);
 	const chunks = new Set<string>();
 	while (time.isSameOrBefore(now)) {
-		chunks.add(time.format());
+		chunks.add(moment(time).utc().format());
 		time.add(1, chunkPeriod);
 	}
 
 	for (const point of points) {
 		chunks.delete(point._time);
 	}
-
+	
 	return Array.from(chunks.values()).map((chunk) => moment(chunk));
 }
 
@@ -46,6 +46,7 @@ function getChunksToRequestInNzt(chunkPeriod: MomentChunk, chunks: moment.Moment
 async function updateData(measurement: Measurement, chunkPeriod: MomentChunk, chunksBack: number, requestChunkPeriod: MomentChunk, contactRequestMetadataGetter: () => Promise<RequestMetadata>) {
 	const daysBack = Math.abs(moment.utc().subtract(chunksBack, chunkPeriod).diff(moment.utc(), 'days'));
 	const points = await getUsageFromInflux(measurement, daysBack + 1);
+	console.log(`Fetched ${points.length} points from Influx`);
 	const missingChunks = getMissingChunks(points, chunkPeriod, chunksBack);
 	const chunksToRequest = getChunksToRequestInNzt(requestChunkPeriod, missingChunks);
 	console.log(`Missing ${missingChunks.length} ${chunkPeriod} Chunks. Requesting ${chunksToRequest.length} ${requestChunkPeriod} Chunks.`);
